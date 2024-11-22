@@ -8,8 +8,6 @@ from websmash import app, mail, get_db
 from websmash.utils import generate_confirmation_mail
 from websmash.models import Job, Notice
 
-import default_settings as settings
-
 def _submit_job(redis_store, job):
     """Submit a new job"""
     redis_store.hmset(u'job:%s' % job.uid, job.get_dict())
@@ -217,7 +215,7 @@ def server_status():
 @app.route('/precalc', defaults={'req_path': ''})
 @app.route('/precalc/<path:req_path>')
 def dir_listing(req_path):
-    BASE_DIR = settings.PRECALCULATED_RESULTS
+    BASE_DIR = app.config['PRECALCULATED_RESULTS']
 
     # Joining the base and the requested path
     abs_path = os.path.join(BASE_DIR, req_path)
