@@ -230,7 +230,7 @@ def dir_listing(req_path):
         
 
     # Show directory contents
-    files = os.listdir(abs_path)
+    files = sorted(os.listdir(abs_path), key=lambda file: file)
     return render_template('files.html', files=files, path=req_path)
 
 
