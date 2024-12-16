@@ -10,9 +10,9 @@
 {% endblock %}
 {% block body %}
 <div class="well well-small">
-  Due to the limited server's resource, users can now only upload annotated fasta files (i.e. fasta + gff3).
-  Please first run your assembly on gene finding tools such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
-  If you are analysing a publicly available genome, please check ‘Precalculated results’ first before submitting a job.
+  To enable us to operate the plantiSMASH webserver with the resources available, users are expected to upload annotated Genbank-formatted or fasta files with gene/CDS annotations (i.e. fasta = gff3). 
+  Please first run your assembly on gene finding tools of your preference, such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
+  If you are analyzing a publicly available genome, please check the database of <a href="./precalc/precalc/">Precalculated Results</a> first before submitting a job.
 </div>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#nucl" data-toggle="tab">Nucleotide input</a></li>
@@ -130,6 +130,12 @@
       <button id="display-job" class="btn btn-primary">Display</button>
     </form>
   </div>
+</div>
+<!-- New PlantiSMASH License Box -->
+<div class="alert alert-success mt-4" style="margin-top: 2rem;">
+  <strong>plantiSMASH License:</strong> PlantiSMASH is licensed under the
+  GNU Affero General Public License v3.0  
+  <a href="https://github.com/plantismash/plantismash/tree/master?tab=AGPL-3.0-1-ov-file">Link to the license on the plantiSMASH gitHub</a>
 </div>
 {% endblock %}
 {% block ready_function %}

@@ -1,24 +1,61 @@
 {% extends 'layout.html' %}
 {% block extra_notices %}
 {% if error %}
-<div class="alert">
+<div class="alert alert-danger">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <strong>Error:</strong> {{error}}
 </div>
 {% endif %}
 {% endblock %}
 {% block body %}
-<form action="{{ url_for('contact') }}" method="POST">
+<h4>Contact Us</h4>
+
+<!-- Form for email contact -->
+<form action="{{ url_for('contact') }}" method="POST" class="well">
   <fieldset>
-    <legend>Contact us if you have questions or want to report a bug.</legend>
+    <p>If you have questions, want to report a bug, or need assistance, feel free to contact us via the form below:</p>
     <label>Your email:</label>
-    <input type="email" name="email" id="email" placeholder="your.email@example.com" value="{{email}}">
-    <label>Your message</label>
-    <textarea name="body" id="body" rows="5" class="input-xxlarge">{{message}}</textarea><br>
-    <button type="submit" class="btn">Send</button>
+    <input type="email" name="email" id="email" placeholder="your.email@example.com" value="{{email}}" class="form-control">
+    <label>Your message:</label>
+    <textarea name="body" id="body" rows="5" class="form-control">{{message}}</textarea><br>
+    <button type="submit" class="btn btn-primary">Send</button>
   </fieldset>
 </form>
-<p>Or ask on Twitter:
-<a href="https://twitter.com/intent/tweet?screen_name=antiSMASH_help" class="twitter-mention-button" data-lang="en" data-related="antiSMASH_help">Tweet to @antiSMASH_help</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<!-- GitHub Issue Suggestion -->
+<div class="alert alert-info">
+  <h5>Have a bug to report or a suggestion?</h5>
+  <p>
+    We encourage you to <strong>open an issue on GitHub</strong> for faster collaboration and tracking. 
+    If you're using the <strong>development version</strong> (e.g., branch <code>dev</code>), please ensure that you:
+  </p>
+  <ul>
+    <li>Check that the issue exists in the latest <code>dev</code> branch.</li>
+    <li>Include the branch name (e.g., <code>dev</code>) in your report.</li>
+  </ul>
+  <p>
+    You can open an issue directly here:
+  </p>
+  <a href="https://github.com/plantismash/plantismash/issues" target="_blank" class="btn btn-success">
+    Open an Issue on GitHub
+  </a>
+</div>
+
+
+<!-- Twitter Contact -->
+<p>Or ask on Twitter: 
+  <a href="https://twitter.com/intent/tweet?screen_name=antiSMASH_help" 
+     class="twitter-mention-button" 
+     data-lang="en" 
+     data-related="antiSMASH_help">Tweet to @antiSMASH_help</a>
+</p>
+<script>
+  !function(d,s,id){
+    var js,fjs=d.getElementsByTagName(s)[0];
+    if(!d.getElementById(id)){
+      js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js,fjs);
+    }
+  }(document,"script","twitter-wjs");
+</script>
 {% endblock %}
