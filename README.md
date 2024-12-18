@@ -40,6 +40,15 @@ REDIS_URL = 'redis://your.redis.database:port/number'
 # This should be the same as RESULTS_PATH
 DEFAULT_DOWNLOAD_DIR = '/data/plantismash/upload'
 
+# if you for whatever reason are running the webserver locally,
+# these two settings are probably not necessary
+
+# precalculated results location. for sure change this
+PRECALCULATED_RESULTS = "/precalc"
+
+# files where the static clusterblast listing will point to
+CLUSTERBLAST_FILES = "/clusterblast"
+
 # Content NCBI likes to return when reading from NCBI fails.
 BAD_CONTENT = ('Error reading from remote server', 'Bad gateway', 'Cannot process ID list', 'server is temporarily unable to service your request', 'Service unavailable', 'Server Error')
 #########################################
