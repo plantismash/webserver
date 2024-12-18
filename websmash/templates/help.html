@@ -237,8 +237,9 @@
     </li>
     <li>
       <div class="question">Can I also submit an unannotated genome sequence in FASTA format?</div>
-      Yes. We offer integrated preliminary gene prediction by GlimmerHMM based on a FASTA input. If you want the highest possible quality of results, we recommend you to use an annotation pipeline like MAKER (with transcriptomic evidence) first to obtain high-quality gene predictions in GBK or GFF format.
-    </li>
+      To enable us to operate the plantiSMASH webserver with the resources available, users are expected to upload annotated Genbank-formatted or fasta files with gene/CDS annotations (i.e. fasta = gff3). 
+      Please first run your assembly on gene finding tools of your preference, such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
+      </li>
     <li>
       <div class="question">What is the privacy policy of plantiSMASH concerning my sequence data?</div>
       We keep this site and the data that it analyses as safe and secure as possible. The randomly generated URL ensures that your data cannot easily be found by third parties. Your output files will be periodically deleted from our server. However, sending your data to the web site is at your own risk. If you are concerned about the sensitivity of your data, please use the stand-alone version of our tool.
