@@ -11,9 +11,10 @@
   </div>
   <div id="news" style="margin: 1em;">
     <h4>News</h4>
-    Version 1.0.beta of plantiSMASH is live now!<br />
-    plantiSMASH is an extension of the widely used tool antiSMASH, now optimized for and made to work on plant genomes.
-    To top it off, these are the added features of plantiSMASH ver 1.0.beta:
+    Version <a href="https://github.com/plantismash/plantismash/tree/dev"> <strong>2.0-beta</strong></a>  of plantiSMASH is live now! <br />
+    plantiSMASH is an extension of the widely used tool antiSMASH, now optimized for and made to work on plant genomes. PlantiSMASH version 2.0.beta features a range of updates and improvements in the areas of gene cluster identification, homology detection, and substrate prediction: 
+
+    plantiSMASH provides: 
     <ul>
       <li>Specific library of pHMM models and completely novel cluster calling logic designed to work on plant genomes</li>
       <li>Specific plant clusterblast database from precalculated plant biosynthetic gene clusters</li>
@@ -21,7 +22,12 @@
       <li>Homology based metabolic modeling</li>
       <li>Coexpression analysis and html-based visualization on detected biosynthetic gene clusters with the CoExpress module.</li>
     </ul>
-    Besides these, all the usual great features found in antiSMASH are also available in plantiSMASH.
+    To top it off, these are the added features of plantiSMASH ver 2.0-beta:
+    <ul>
+      <li> Updated library of pHMM models and the number of detection rules increased from 6 to 12, including 3 rules being updated. </li>
+      <li> Updated plant clusterblast database with precalculated plant biosynthetic gene clusters for 382 NCBI plant genomes.  </li>
+      <li> Updated specific module for detection of repeats in BURP domains for candidate cyclopeptide BGCs.  </li>
+      <li> Implemented prediction of substrate specificities of enzyme subfamilies for cellulose synthases, UDP-glucuronosyltransferases, short-chain dehydrogenases, and oxidosqualene cyclases.   </li>
   </div>
   <div id="intro" style="margin: 1em;">
     <h4>Introduction</h4>
@@ -45,7 +51,7 @@
     <h4>plantiSMASH input parameters</h4>
     <p>
       The ideal input for plantiSMASH is an annotated nucleotide file in Genbank format or EMBL format.
-      You can either upload a GenBank/EMBL file manually, or simply enter the GenBank/RefSeq accession number of your sequence for plantiSMASH to upload it.
+      You can either upload a GenBank/EMBL file manually, or enter the GenBank/RefSeq accession number of your sequence for plantiSMASH to upload it.
       Alternatively, you can provide a FASTA file containing one or more sequences.
       If possible, you should also supply a separate GFF3-formatted file containing the annotation information for all said sequences.
       If no annotation is available, we recommend running your sequence through an annotation pipeline like <a href='http://weatherby.genetics.utah.edu/MAKER/wiki/index.php/MAKER_Tutorial'>MAKER</a> (preferably with transcriptomic evidence) to obtain GBK/EMBL files with high-quality annotations.
@@ -144,58 +150,100 @@
       Also, one important thing to note is that the expression values should be comparable across all samples, i.e. they are measured and normalized in the same way (log values, signal count data, etc).
     </p>
   </div>
-  <div id="faq">
-    <h4>Frequently Asked Questions</h4>
-    <ol>
-      <li>
-        <div class="question">Can I run plantiSMASH locally as a stand-alone program?</div>
-        Yes.
-        A stand-alone version of plantiSMASH is available from the <a href="http://plantismash.secondarymetabolites.org/download.html">download section of this website</a>.
-        PlantiSMASH natively run on python 2.7 under GNU/Linux, but will also run on other environment as well (OSX / Windows), given the dependency requirements are fulfilled.
-      </li>
-      <li>
-        <div class="question">Why doesn't plantiSMASH detect my gene cluster?</div>
-        Some gene clusters, such as fatty acid or cofactor biosynthesis gene
-        clusters are not identified by antiSMASH, as they are categorized as <a
-          href="http://en.wikipedia.org/wiki/Primary_metabolism" target="_blank">primary
-          metabolism</a> instead of <a
-          href="http://en.wikipedia.org/wiki/Secondary_metabolism" target="_blank">secondary
-          metabolism</a>. If you are aware of a true secondary metabolite
-        biosynthesis gene cluster that escapes detection by antiSMASH, please
-        contact us, and we will add the models necessary to detect it.
-      </li>
-      <li>
-        <div class="question">Why are several genes upstream and downstream of gene clusters included, even though they do not seem to be part of the gene cluster?</div>
-        In designing plantiSMASH, we tried to be very conservative in cutting gene cluster borders, leaving this to the expert eye of the user, as it is better to show some extra genes than to leave out key genes.
-      </li>
-      <li>
-        <div class="question">Can I also submit an unannotated genome sequence in FASTA format?</div>
-        Yes. We offer integrated preliminary gene prediction by GlimmerHMM based on a FASTA input. If you want the highest possible quality of results, we recommend you to use an annotation pipeline like MAKER (with transcriptomic evidence) first to obtain high-quality gene predictions in GBK or GFF format.
-      </li>
-      <li>
-        <div class="question">What is the privacy policy of antiSMASH concerning my sequence data?</div>
-        We try to keep this site and the data that it analyzes as safe and secure as possible. Your output files will be deleted from our server within one month. However, sending your data to the web site is at your own risk. If you are concerned about the sensitivity of your data, please use the stand-alone version of our tool.
-      </li>
-    </ol>
+  <div id="subgroup" >
+    <h4>Subgroup identification module</h4>
+    <p>
+      plantiSMASH predicts substrate specificities of enzyme subfamilies for cellulose synthases, UDP-glucuronosyltransferases, short-chain dehydrogenases, and oxidosqualene cyclases, using pplacer and hmmer. 
+      The phylogenetic placement tool <a href=" https://github.com/matsen/pplacer">pplacer</a> is used to place the target protein sequence on a precomputed reference tree. 
+      If the other members under the target parent node belong to the same subgroup, the target is considered to belong to the subgroup. 
+      In addition, <a href="https://huttenhower.sph.harvard.edu/graphlan/">GraPhlAn (Graphical Phylogenetic Analysis)</a> is used to generate a tree image of the placement result. 
+      The HMM of each subgroup used by hmmer scan is made based on the full-length protein sequences of members in the subgroup. 
+      HMMs find matches based on the conserved positions of subgroup members, so they are also an efficient and simple method to identify subgroups of targets, especially those sequences with big differences. 
+      When the subgroup represented by the HMM with the highest match bitscore is consistent with the results from pplacer, it will be reported on the overview page that the target may have the same substrate type as those members of the subgroup. 
+      If it belongs to the product type that is predicted by the existence of core enzymes, it is specifically marked with * . 
+      For situations where the results of these two tools are inconsistent, or the target is not placed in a subgroup, users need to make their judgment based on results shown on the webpage of each cluster.
+    </p>
+    <img src="{{ url_for('static', filename='images/image023.png') }}">
   </div>
   <div id="secmettypes">
-    <h4>Secondary metabolite types detected</h4>
+    <h4>Specialized metabolite types detected</h4>
     <dl>
       <dt id="alkaloid">alkaloid</dt>
-      <dd>Putative alkaloid biosynthetic cluster. Characterized by the presence of Bet_v_1/Cu_amine_oxid/Str_synth enzymes.</dd>
+      <dd>Putative alkaloid biosynthetic cluster. Characterized by the presence of Bet_v_1/Cu_amine_oxid/Str_synth/BBE/Orn_DAP_Arg_deC/Pyridoxal_deC enzymes.</dd>
+      
       <dt id="lignan">lignan</dt>
       <dd>Putative lignan biosynthetic cluster. Characterized by the presence of Dirigent enzyme.</dd>
-      <dt id="polyketide">alkaloid</dt>
-      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of Dirigent enzymes.</dd>
+      
       <dt id="saccharide">saccharide</dt>
-      <dd>Putative saccharide biosynthetic cluster. Characterized by the presence of Chal_sti_synt enzymes.</dd>
+      <dd>Putative saccharide biosynthetic cluster. Characterized by the presence of Glycosyl transferases enzymes (1,2,28)/UDPGT/Glyco_hydro/Cellulose_synt enzymes.</dd>
+      
       <dt id="terpene">terpene</dt>
       <dd>Putative terpene biosynthetic cluster. Characterized by the presence of Terpene_synth/Prenyltrans/SQHop_cyclase/PRISE enzymes.</dd>
-      <dt id="putative">putative</dt>
-      <dd>Putative / uncategorized biosynthetic cluster</dd>
-      <dt id="hybrid">{A} – {B}</dt>
-      <dd>Biosynthetic cluster containing signature traces from both A and B secondary metabolite type.</dd>
+      
+      <dt id="polyketide">polyketide</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of AMP-binding and Chal_sti_synt enzymes.</dd>
+      
+      <dt id="fatty_acid">fatty acid</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of AMP-binding/Transferase.</dd>
+      
+      <dt id="mate">MatE</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of MatE enzymes.</dd>
+      
+      <dt id="sesterpene">sesterpene</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of Terpene_synth_C, polyprenyl_synt.</dd>
+      
+      <dt id="strictosidine_like">strictosidine-like</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of Str_synth/Pyridoxal_deC enzymes.</dd>
+      
+      <dt id="phenolamide">phenolamide</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of Transferase, Pyridoxal_deC enzymes or Transferase, Orn_DAP_Arg_deC, Orn_Arg_deC_N enzymes.</dd>
+      
+      <dt id="cyclopeptide">cyclopeptide</dt>
+      <dd>Putative polyketide biosynthetic cluster. Characterized by the presence of BURP enzymes as well as a putative peptide precursor repeat sequence.</dd>
+      
+      <dt id="plant">plant</dt>
+      <dd>Putative / uncategorized plant biosynthetic cluster, containing a minimum of 4 enzyme domains from the full list.</dd>
     </dl>
+    
   </div>
+</div>
+<div id="faq">
+  <h4>Frequently Asked Questions</h4>
+  <ol>
+    <li>
+      <div class="question">Can I run plantiSMASH locally as a stand-alone program?</div>
+      Yes.
+      A stand-alone version of plantiSMASH is available from the <a href="http://plantismash.secondarymetabolites.org/download.html">download section of this website</a>.
+      PlantiSMASH natively run on python 2.7 under GNU/Linux, but will also run on other environment as well (OSX / Windows), given the dependency requirements are fulfilled.
+    </li>
+    <li>
+      <div class="question">Why doesn't plantiSMASH detect my gene cluster?</div>
+      Some gene clusters, such as cofactor biosynthesis gene
+      clusters are not identified by plantiSMASH, as they are categorized as <a
+        href="http://en.wikipedia.org/wiki/Primary_metabolism" target="_blank">primary
+        metabolism</a> instead of <a
+        href="http://en.wikipedia.org/wiki/Secondary_metabolism" target="_blank">secondary
+        metabolism</a>. If you are aware of a true secondary metabolite
+      biosynthesis gene cluster that escapes detection by antiSMASH, please
+      contact us, and we will add the models necessary to detect it.
+    </li>
+    <li>
+      <div class="question">Why are several genes upstream and downstream of gene clusters included, even though they do not seem to be part of the gene cluster?</div>
+      In designing plantiSMASH, we tried to be very conservative in cutting gene cluster borders, leaving this to the expert eye of the user, as it is better to show some extra genes than to leave out key genes.
+    </li>
+    <li>
+      <div class="question">Why is my BGC not detected in full?</div>
+      The user can specify a different cutoff when running the program as a stand-alone program, by manually editing the cluster rules file, avaialble on the gitHub repository. If you run into such an issue, contact us or open a ticket on GitHub. 
+    </li>
+    <li>
+      <div class="question">Can I also submit an unannotated genome sequence in FASTA format?</div>
+      To enable us to operate the plantiSMASH webserver with the resources available, users are expected to upload annotated Genbank-formatted or fasta files with gene/CDS annotations (i.e. fasta = gff3). 
+      Please first run your assembly on gene finding tools of your preference, such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
+      </li>
+    <li>
+      <div class="question">What is the privacy policy of plantiSMASH concerning my sequence data?</div>
+      We keep this site and the data that it analyses as safe and secure as possible. The randomly generated URL ensures that your data cannot easily be found by third parties. Your output files will be periodically deleted from our server. However, sending your data to the web site is at your own risk. If you are concerned about the sensitivity of your data, please use the stand-alone version of our tool.
+    </li>
+  </ol>
 </div>
 {% endblock %}

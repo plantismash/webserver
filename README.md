@@ -9,7 +9,10 @@ Installation
 ------------
 
 ```
+conda create -n plantiserver 
+conda activate
 pip install -r requirements.txt
+python run_development_server.py
 ```
 
 Running the Web Interface

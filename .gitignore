@@ -6,3 +6,4 @@ results/*
 jobs.db
 .drone.yml
 .drone.sec
+.python-version
