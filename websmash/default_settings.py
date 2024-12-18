@@ -14,8 +14,15 @@ DEFAULT_RECIPIENTS = ["bob@example.org"]
 # Flask-Redis settings
 REDIS_URL = "redis://localhost:6379/0"
 
+
+# if you for whatever reason are running the webserver locally,
+# these two settings are probably not necessary
+
 # precalculated results location. for sure change this
 PRECALCULATED_RESULTS = "/precalc"
+
+# files where the static clusterblast listing will point to
+CLUSTERBLAST_FILES = "/clusterblast"
 
 OLD_JOB_COUNT = 0
 #########################################
