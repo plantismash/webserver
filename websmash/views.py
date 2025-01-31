@@ -231,6 +231,10 @@ def dir_listing(req_path):
 
     # Show directory contents
     files = sorted(os.listdir(abs_path), key=lambda file: file)
+
+    if "index.html" in files:
+        return send_file(os.path.join(abs_path, "index.html"))
+
     return render_template('files.html', files=files, path=req_path)
 
 @app.route('/clusterblast', defaults={'req_path': ''})
