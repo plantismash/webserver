@@ -37,7 +37,7 @@ DEBUG = False
 SECRET_KEY = "Better put a proper secret here"
 # Path to plantiSMASH output directory on disk
 RESULTS_PATH = '/data/plantismash/upload'
-# URL path to antiSMASH results in the webapp
+# URL path to plantiSMASH results in the webapp
 RESULTS_URL = '/upload'
 
 # Flask-Mail settings
@@ -62,6 +62,7 @@ CLUSTERBLAST_FILES = "/clusterblast"
 
 # Content NCBI likes to return when reading from NCBI fails.
 BAD_CONTENT = ('Error reading from remote server', 'Bad gateway', 'Cannot process ID list', 'server is temporarily unable to service your request', 'Service unavailable', 'Server Error')
+
 #########################################
 ```
 
