@@ -137,11 +137,11 @@ def contact():
             if message == '':
                 raise Exception("No message specified. Please specify a message")
 
-            contact_msg = Message(subject='antiSMASH feedback',
+            contact_msg = Message(subject='plantiSMASH feedback',
                                   recipients=app.config['DEFAULT_RECIPIENTS'],
                                   body=message, sender=email)
             mail.send(contact_msg)
-            confirmation_msg = Message(subject='antiSMASH feedback received',
+            confirmation_msg = Message(subject='plantiSMASH feedback received',
                                        recipients=[email],
                                        body=generate_confirmation_mail(message))
             mail.send(confirmation_msg)
