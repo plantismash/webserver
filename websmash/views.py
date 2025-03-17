@@ -217,23 +217,39 @@ def server_status():
 def dir_listing(req_path):
     BASE_DIR = app.config['PRECALCULATED_RESULTS']
 
-    # Joining the base and the requested path
-    abs_path = os.path.join(BASE_DIR, req_path)
+    sys_path = os.path.join(BASE_DIR, req_path)
+
+    abs_path = os.path.join('/precalc', req_path)
+    
 
     # Return 404 if path doesn't exist
-    if not os.path.exists(abs_path):
+    if not os.path.exists(sys_path):
         return abort(404)
 
     # Check if path is a file and serve
-    if os.path.isfile(abs_path):
-        return send_file(abs_path)
-        
+    if os.path.isfile(sys_path):
+        return send_file(sys_path)
 
+    abs_path = abs_path + ('/' if abs_path[-1] != '/' else '')
     # Show directory contents
-    files = sorted(os.listdir(abs_path), key=lambda file: file)
+    files = os.listdir(sys_path)
+
+    print(files)
 
     if "index.html" in files:
-        return send_file(os.path.join(abs_path, "index.html"))
+        return send_file(os.path.join(sys_path, "index.html"))
+
+    for i, f in enumerate(files):
+        f_sys_path = os.path.join(sys_path, f)
+        if os.path.isdir(f_sys_path):
+            files[i] = f + '/'
+
+    # sort directories first, then files
+    files.sort(key=lambda file: (not file.endswith('/'), file))
+
+
+    files = [abs_path + f for f in files]
+
 
     return render_template('files.html', files=files, path=req_path)
 
