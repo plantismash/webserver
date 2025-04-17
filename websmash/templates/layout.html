@@ -20,9 +20,9 @@
       </div>
       <div class="col-md-4 icons">
         <a href="{{ url_for('new') }}"><img src="{{ url_for('static', filename='images/home.png') }}" alt="home" title="Go to start page"></a>
-        <a href="{{ url_for('download') }}"><img src="{{ url_for('static', filename='images/download.png') }}" alt="download" title="Download antiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/install/"><img src="{{ url_for('static', filename='images/download.png') }}" alt="download" title="Download antiSMASH"></a>
         <a href="{{ url_for('help') }}"><img src="{{ url_for('static', filename='images/help.png') }}" alt="help" title="Get help using antiSMASH"></a>
-        <a href="{{ url_for('about') }}"><img src="{{ url_for('static', filename='images/about.png') }}" alt="about" title="About antiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/about/"><img src="{{ url_for('static', filename='images/about.png') }}" alt="about" title="About antiSMASH"></a>
         <a href="{{ url_for('contact') }}"><img src="{{ url_for('static', filename='images/mail.png') }}" alt="contact" title="Contact the antiSMASH team"></a>
       </div>
     </div>
@@ -54,15 +54,25 @@
         {% block extra_notices %}{% endblock %}
       </div>
     </div>
-    <div class="row footer">
-      <div class="org-logos">
-        <img class="col-md-2" src="{{ url_for('static', filename='images/wur-logo.png') }}" style="padding-top: 1em;">
-        <img class="col-md-1" src="{{ url_for('static', filename='images/jic-logo.png') }}">
-        <img class="col-md-2" src="{{ url_for('static', filename='images/hu-logo.png') }}">
-        <img class="col-md-1" src="{{ url_for('static', filename='images/jgi-logo.png') }}" style="width: 100spx; height: auto;">
+    <div class="footer container">
+      <div class="org-logos row">
+        <div class="col-1 col-md-3">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/wur-logo.png') }}" style="padding-top: 1em; width: 100%;">
+        </div>
+        <div class="col-1 col-md-2">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/jic-logo.png') }}" style="width: 100%;">
+        </div>
+        <div class="col-1 col-md-3">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/hu-logo.png') }}" style="width: 100%;">
+        </div>
+        <div class="col-1 col-md-2">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/jgi-logo.png') }}" style="width: 100%;">
+        </div>
       </div>
-      <div class="col-md-4 col-md-offset-1 copyright well well-small">
-        If you have found plantiSMASH useful, please <a href="{{ url_for('about') }}">cite us</a>.
+      <div class="row">
+        <div class="col-md-4 copyright well well-small offset-md-4">
+          If you have found plantiSMASH useful, please <a href="{{ url_for('about') }}">cite us</a>.
+        </div>
       </div>
     </div>
     </div>
