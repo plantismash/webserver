@@ -8,6 +8,7 @@ RESULTS_URL = "/upload"
 
 # Flask-Mail settings
 MAIL_SERVER = "mail.example.org"
+MAIL_DOMAIN = "example.org"
 DEFAULT_MAIL_SENDER = "alice@example.org"
 DEFAULT_RECIPIENTS = ["bob@example.org"]
 
