@@ -7,6 +7,7 @@ from werkzeug import secure_filename
 from websmash import app, mail, get_db
 from websmash.utils import generate_confirmation_mail
 from websmash.models import Job, Notice
+import telnetlib
 
 
 def _submit_job(redis_store, job):
@@ -123,6 +124,54 @@ def help():
 def download():
     return render_template('download.html')
 
+
+
+def handle_send_telnet(mail_from, mail_to, message, host="smtp.example.org", domain="example.org"):
+    t = telnetlib.Telnet(host=host, port=25)
+    try:
+        print "connected"
+
+        t.write(b"EHLO " + bytes(domain) + b"\n")
+        print "wrote ehlo"
+        res = t.read_until(b"250 CHUNKING\r\n")
+        print res
+        # while True:
+        #     if res == b"250 CHUNKING\r\n":
+        #         break
+
+        t.write(b"MAIL FROM:" + bytes(mail_from) + b"\n")
+        print "wrote from"
+        print t.read_until(b"\n")
+
+        t.write(b"RCPT TO:" + bytes(mail_to) + b"\n")
+        print "wrote rcpt"
+        print t.read_until(b"\n")
+
+        t.write(b"DATA\n")
+        print "start data"
+        print t.read_until(b"\n")
+
+        # t.write(b"Subject: " + bytes(mail_subject, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"From: " + bytes(mail_from, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"To: " + bytes(mail_to, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"\r\n")
+        # print "wrote"
+        t.write(bytes(message) +  b"\r\n")
+        print "wrote"
+        t.write(b"\r\n.\r\n")
+        print "wrote"
+    except Exception as e:
+        print e
+    finally:
+        t.write(b"QUIT\n")
+        print t.read_until(b"\n")
+        print "disconnected telnet"
+        t.close()
+
+
 @app.route('/contact', methods=['GET', 'POST'])
 @app.route('/contact.html', methods=['GET', 'POST'])
 def contact():
@@ -138,14 +187,31 @@ def contact():
             if message == '':
                 raise Exception("No message specified. Please specify a message")
 
-            contact_msg = Message(subject='plantiSMASH feedback',
-                                  recipients=app.config['DEFAULT_RECIPIENTS'],
-                                  body=message, sender=email)
-            mail.send(contact_msg)
-            confirmation_msg = Message(subject='plantiSMASH feedback received',
-                                       recipients=[email],
-                                       body=generate_confirmation_mail(message))
-            mail.send(confirmation_msg)
+            # contact_msg = Message(subject='plantiSMASH feedback',
+            #                       recipients=app.config['DEFAULT_RECIPIENTS'],
+            #                       body=message, sender=email)
+            # mail.send(contact_msg)
+            # confirmation_msg = Message(subject='plantiSMASH feedback received',
+            #                            recipients=[email],
+            #                            body=generate_confirmation_mail(message))
+            # mail.send(confirmation_msg)
+
+            # send feedback email
+            feedback_message = "Subject: %s\n" % "plantiSMASH feedback"
+            feedback_message += "From: %s\n" % email
+            feedback_message += "To: %s\n" % app.config['DEFAULT_MAIL_SENDER']
+            feedback_message += "\n"
+            feedback_message += message
+            handle_send_telnet(email, app.config['DEFAULT_MAIL_SENDER'], feedback_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
+            # Send confirmation email
+            confirmation_message = "Subject: %s\n" % "plantiSMASH feedback received"
+            confirmation_message += "From: %s\n" % app.config['DEFAULT_MAIL_SENDER']
+            confirmation_message += "To: %s\n" % email
+            confirmation_message += "\n"
+            confirmation_message += generate_confirmation_mail(message)
+            handle_send_telnet(app.config['DEFAULT_MAIL_SENDER'], email, confirmation_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
 
             return render_template('message_sent.html', message=message)
     except Exception, e:
