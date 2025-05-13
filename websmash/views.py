@@ -8,6 +8,7 @@ from websmash import app, mail, get_db
 from websmash.utils import generate_confirmation_mail
 from websmash.models import Job, Notice
 
+
 def _submit_job(redis_store, job):
     """Submit a new job"""
     redis_store.hmset(u'job:%s' % job.uid, job.get_dict())

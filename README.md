@@ -47,6 +47,9 @@ DEFAULT_RECIPIENTS = ["alice@example.com", "bob@example.com"]
 REDIS_URL = 'redis://your.redis.database:port/number'
 # defaults to redis://localhost:6379/0
 
+# Version of antiSMASH to use
+VERSION = '2.0-beta'
+
 # Flask-Downloader settings
 # This should be the same as RESULTS_PATH
 DEFAULT_DOWNLOAD_DIR = '/data/plantismash/upload'

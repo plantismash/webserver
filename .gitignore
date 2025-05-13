@@ -8,3 +8,4 @@ jobs.db
 .drone.sec
 .python-version
 settings.cfg
+.vscode/

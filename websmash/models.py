@@ -1,5 +1,16 @@
 import uuid
 from datetime import datetime, timedelta
+import re 
+
+def parse_datetime_flexibly(s):
+    s = s.replace('T', ' ').split('+')[0].split('Z')[0]  # remove 'T' and timezone
+    for fmt in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.strptime(s, fmt)
+        except ValueError:
+            continue
+    raise ValueError("Time data '{}' is not in a recognized format.".format(s))
+
 
 class Job(object):
     def __init__(self, **kwargs):
@@ -9,12 +20,12 @@ class Job(object):
         self.filename = kwargs.get('filename', '')
         added = kwargs.get('added', datetime.utcnow())
         if isinstance(added, (str, unicode)):
-            self.added = datetime.strptime(added, "%Y-%m-%d %H:%M:%S.%f")
+            self.added = parse_datetime_flexibly(added)
         else:
             self.added = added
         last_changed = kwargs.get('last_changed', self.added)
         if isinstance(last_changed, (str, unicode)):
-            self.last_changed = datetime.strptime(last_changed, "%Y-%m-%d %H:%M:%S.%f")
+            self.last_changed = parse_datetime_flexibly(last_changed)
         else:
             self.last_changed = last_changed
         self.geneclustertypes = kwargs.get('geneclustertypes', '1')
