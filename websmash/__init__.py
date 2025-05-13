@@ -20,7 +20,7 @@ mail = Mail(app)
 def inject_version():
     return dict(version=app.config.get('VERSION', 'dev'))
 
-print("VERSION from config:", app.config.get('VERSION'))
+print("Webserver specifies version:", app.config.get('VERSION'))
 
 def get_db():
     redis_store = getattr(g, '_database', None)

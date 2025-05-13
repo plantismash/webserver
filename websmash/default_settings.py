@@ -14,6 +14,8 @@ DEFAULT_RECIPIENTS = ["bob@example.org"]
 # Flask-Redis settings
 REDIS_URL = "redis://localhost:6379/0"
 
+# Version 
+VERSION = "0.1.0"
 
 # if you for whatever reason are running the webserver locally,
 # these two settings are probably not necessary

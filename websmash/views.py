@@ -176,14 +176,30 @@ def status(task_id):
     res = redis_store.hgetall(u'job:%s' % task_id)
     if res == {}:
         abort(404)
+
+    # Decode byte strings to Unicode for python 3 compatibility
+    res = {k.decode('utf-8') if isinstance(k, bytes) else k:
+           v.decode('utf-8') if isinstance(v, bytes) else v
+           for k, v in res.items()}
+    
     job = Job(**res)
+    print("Status check: job %s has status '%s'" % (job.uid, job.status))
+
     if job.status == 'done':
+        print("Job %s is completed" % job.uid)
+        # check if the job is done and if so, move it to the completed queue
         result_url = "%s/%s" % (app.config['RESULTS_URL'], job.uid)
+        redis_store.hset('job:%s' % job.uid, 'result_url', result_url)
+
         if job.jobtype == 'antismash':
             result_url += "/display.xhtml"
         else:
             result_url += "/index.html"
         res['result_url'] = result_url
+
+    else:
+        print("Job %s is not completed yet (status: %s)" % (job.uid, job.status))
+
     res['short_status'] = job.get_short_status()
 
     return jsonify(res)
@@ -197,7 +213,7 @@ def server_status():
     running = redis_store.llen('jobs:running')
 
     # carry over jobs count from the old database from the config
-    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:completed') + \
+    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:done') + \
                  redis_store.llen('jobs:failed')
 
     if pending + long_running + running > 0:
