@@ -17,12 +17,12 @@
       </div>
       <div class="col-md-5 antismash-title">
         <a href="{{ url_for('new') }}">Plant Specialized Metabolite Analysis</a> 
-        <span class="version">v{{ version }}</span>
+        <span class="version" style="color: white;">v{{ version }}</span>
       </div>
       <div class="col-md-4 icons">
         <a href="{{ url_for('new') }}"><img src="{{ url_for('static', filename='images/home.png') }}" alt="home" title="Go to start page"></a>
         <a href="https://plantismash.github.io/documentation/install/"><img src="{{ url_for('static', filename='images/download.png') }}" alt="download" title="Download antiSMASH"></a>
-        <a href="{{ url_for('help') }}"><img src="{{ url_for('static', filename='images/help.png') }}" alt="help" title="Get help using antiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/website_submission/"><img src="{{ url_for('static', filename='images/help.png') }}" alt="help" title="Get help using plantiSMASH"></a>
         <a href="https://plantismash.github.io/documentation/about/"><img src="{{ url_for('static', filename='images/about.png') }}" alt="about" title="About antiSMASH"></a>
         <a href="{{ url_for('contact') }}"><img src="{{ url_for('static', filename='images/mail.png') }}" alt="contact" title="Contact the antiSMASH team"></a>
       </div>
@@ -56,12 +56,12 @@
       </div>
     </div>
     <div class="footer container">
-      <div class="org-logos row">
+      <div class="org-logos row justify-content-center align-items-center text-center" style="gap: 1rem;">
         <div class="col-1 col-md-3">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/wur-logo.png') }}" style="padding-top: 1em; width: 100%;">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/wur-logo1.png') }}" style="padding-top: 1em; width: 100%;">
         </div>
         <div class="col-1 col-md-2">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/jic-logo.png') }}" style="width: 100%;">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/jic_logo.png') }}" style="width: 100%;">
         </div>
         <div class="col-1 col-md-3">
           <img class="img-fluid" src="{{ url_for('static', filename='images/hu-logo.png') }}" style="width: 100%;">
@@ -69,10 +69,10 @@
         <div class="col-1 col-md-2">
           <img class="img-fluid" src="{{ url_for('static', filename='images/jgi-logo.png') }}" style="width: 100%;">
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4 copyright well well-small offset-md-4">
-          If you have found plantiSMASH useful, please <a href="{{ url_for('about') }}">cite us</a>.
+        <div class="col-1 col-md-2 d-flex justify-content-center">
+          <div class="copyright-box well well-small text-center">
+            If you have found plantiSMASH useful, please <a href=https://plantismash.github.io/documentation/about/#how-to-cite>cite us</a>.
+          </div>
         </div>
       </div>
     </div>

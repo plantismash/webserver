@@ -9,11 +9,18 @@
 {% endif %}
 {% endblock %}
 {% block body %}
-<div class="well alert-danger" style="display: none;">
+<div class="well alert-danger" style="display: block;"> 
+    <!-- 
+    This alert is hidden by default using 'display: none'.
+    Set to 'display: block' (or remove the inline style) to show it.
+    Example for toggling visibility dynamically:
+    document.querySelector('.my-alert').style.display = 'block';
+  -->
   <h5>Developer notice</h5>
   <p>
-   Due to plantiSMASH development we will need to restart the service this week (17-21 March 2025), which may result in job disruption. 
-   Please resubmit your job if you encounter any issues. We apologize for any inconvenience this may cause.
+   PlantiSMASH 2.0-beta4 version is online, containing new and updated detection rules. 
+   Review the changes in our changelog <a href="https://plantismash.github.io/documentation/changelog/2.0/">here</a> 
+   and on GitHub <a href="https://github.com/plantismash/plantismash/releases">here</a>.
   </p>
 </div>
 <div class="well well-small">
