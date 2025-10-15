@@ -82,6 +82,10 @@ uwsgi --pythonpath /var/www --http :5000 --module websmash:app --uid 33 --gid 33
 
 Now you can connect to the plantiSMASH web app at port 5000. Now set up a reverse proxy to serve the web app from port 80.
 
+Deploy the webserver
+-------
+Before the deploying the webserver, make sure that the plantiSMASH version mentioned in the config, matches the one available in plantiSMASH `antismash/__init__.py`. 
+
 License
 -------
 
