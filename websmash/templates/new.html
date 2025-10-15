@@ -9,14 +9,28 @@
 {% endif %}
 {% endblock %}
 {% block body %}
+<div class="well alert-danger" style="display: block;"> 
+    <!-- 
+    This alert is hidden by default using 'display: none'.
+    Set to 'display: block' (or remove the inline style) to show it.
+    Example for toggling visibility dynamically:
+    document.querySelector('.my-alert').style.display = 'block';
+  -->
+  <h5>Developer notice</h5>
+  <p>
+   plantiSMASH 2.0 version is online, containing new and updated detection rules. 
+   Review the changes in our changelog <a href="https://plantismash.github.io/documentation/changelog/2.0/">here</a> 
+   and on GitHub <a href="https://github.com/plantismash/plantismash/releases">here</a>.
+  </p>
+</div>
 <div class="well well-small">
-  Due to the limited server's resource, users can now only upload annotated fasta files (i.e. fasta + gff3).
-  Please first run your assembly on gene finding tools such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
-  If you are analysing a publicly available genome, please check ‘Precalculated results’ first before submitting a job.
+  To enable us to operate the plantiSMASH webserver with the resources available, users are expected to upload annotated Genbank-formatted or fasta files with gene/CDS annotations (i.e. fasta = gff3). 
+  Please first run your assembly on gene finding tools of your preference, such as <a href="http://bioinf.uni-greifswald.de/augustus/">AUGUSTUS</a> or <a href="https://www.yandell-lab.org/software/maker.html">MAKER</a> before submitting it into plantiSMASH.
+  If you are analyzing a publicly available genome, please check the database of <a href="./precalc/v2">Precalculated Results</a> first before submitting a job.
 </div>
 <ul class="nav nav-tabs">
   <li class="active"><a href="#nucl" data-toggle="tab">Nucleotide input</a></li>
-  <li><a href="./precalc/precalc/">Precalculated Results</a></li>
+  <li><a href="./precalc">plantiSMASH database</a></li>
   <li><a href="#job" data-toggle="tab">Results for existing job</a></li>
 </ul>
 <div class="tab-content">
@@ -131,6 +145,12 @@
     </form>
   </div>
 </div>
+<!-- New plantiSMASH License Box -->
+<div class="alert alert-success mt-4" style="margin-top: 2rem;">
+  <strong>plantiSMASH License:</strong> plantiSMASH is licensed under the
+  
+  <a href="https://github.com/plantismash/plantismash/tree/master?tab=AGPL-3.0-1-ov-file">GNU Affero General Public License v3.0</a>.
+</div>
 {% endblock %}
 {% block ready_function %}
     // Make sure that only NCBI accession# or uploadable file is present.
@@ -143,7 +163,7 @@
         clear_upload();
     });
     $('#btn-sample-output').click(function(){
-        window.open('/precalc/precalc/Arabidopsis_thaliana/', '_self');
+        window.open('/precalc/v2/Arabidopsis_thaliana_GCF_000001735.4/index.html', '_self');
     });
 
     $('.clusterblast').on('show.bs.collapse', function(){

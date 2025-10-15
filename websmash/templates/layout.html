@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>plantiSMASH: Plant Secondary Metabolite Analysis</title>
+    <title>plantiSMASH: Plant Specialized Metabolite Analysis</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
@@ -10,19 +10,57 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/less.js') }}"> </script>
     {% block extra_headers %}{% endblock %}
 </head>
+<style>
+  /* Force a centered row with tight spacing */
+  .org-logos{
+    display:flex !important;
+    justify-content:center;
+    align-items:center;
+    gap:12px;                 /* reduce spacing */
+    flex-wrap:wrap;
+    margin:14px 0 6px;
+  }
+
+  /* Remove any extra margins from frames */
+  .org-logos .logo-frame{
+    padding:0;
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* width optional – let images size themselves by height */
+  }
+
+  /* Make the logos BIG by explicit height. Block removes inline-gap. */
+  .org-logos .logo-frame img{
+    display:block;
+    height:80px !important;  /* <- change 140→160 if you want larger */
+    width:auto !important;
+    max-height:none !important;
+    max-width:none !important;
+  }
+
+
+  /* Slightly larger on desktop */
+  @media (min-width:992px){
+    .org-logos .logo-frame img{ height:60px !important; }
+    .org-logos{ gap:16px; }
+  }
+</style>
 <body>
     <div class="row header">
       <div class="col-md-1 col-md-offset-2">
         <a href="{{ url_for('new') }}"><img src="{{ url_for('static', filename='images/plantismash_logo.png') }}" alt="antiSMASH" class="as-logo"></a>
       </div>
       <div class="col-md-5 antismash-title">
-        <a href="{{ url_for('new') }}">Plant Secondary Metabolite Analysis</a>
+        <a href="{{ url_for('new') }}">Plant Specialized Metabolite Analysis</a> 
+        <span class="version" style="color: white;">{{ version }}</span>
       </div>
       <div class="col-md-4 icons">
         <a href="{{ url_for('new') }}"><img src="{{ url_for('static', filename='images/home.png') }}" alt="home" title="Go to start page"></a>
-        <a href="{{ url_for('download') }}"><img src="{{ url_for('static', filename='images/download.png') }}" alt="download" title="Download antiSMASH"></a>
-        <a href="{{ url_for('help') }}"><img src="{{ url_for('static', filename='images/help.png') }}" alt="help" title="Get help using antiSMASH"></a>
-        <a href="{{ url_for('about') }}"><img src="{{ url_for('static', filename='images/about.png') }}" alt="about" title="About antiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/install/"><img src="{{ url_for('static', filename='images/download.png') }}" alt="download" title="Download antiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/website_submission/"><img src="{{ url_for('static', filename='images/help.png') }}" alt="help" title="Get help using plantiSMASH"></a>
+        <a href="https://plantismash.github.io/documentation/about/"><img src="{{ url_for('static', filename='images/about.png') }}" alt="about" title="About antiSMASH"></a>
         <a href="{{ url_for('contact') }}"><img src="{{ url_for('static', filename='images/mail.png') }}" alt="contact" title="Contact the antiSMASH team"></a>
       </div>
     </div>
@@ -54,17 +92,40 @@
         {% block extra_notices %}{% endblock %}
       </div>
     </div>
-    <div class="row footer">
+<div class="footer container">
+
+  <!-- Logos row -->
+  <div class="row">
+    <div class="col-xs-12">
       <div class="org-logos">
-        <img class="col-md-2" src="{{ url_for('static', filename='images/wur-logo.png') }}" style="padding-top: 1em;">
-        <img class="col-md-2" src="{{ url_for('static', filename='images/unila-logo.png') }}">
-        <img class="col-md-1" src="{{ url_for('static', filename='images/cfb-logo.png') }}">
-        <img class="col-md-1" src="{{ url_for('static', filename='images/jic-logo.png') }}">
-      </div>
-      <div class="col-md-4 col-md-offset-1 copyright well well-small">
-        If you have found plantiSMASH useful, please <a href="{{ url_for('about') }}">cite us</a>.
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/wur-logo1.png') }}" alt="WUR logo">
+        </div>
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/jic_logo.png') }}" alt="JIC logo">
+        </div>
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/hu-logo.png') }}" alt="HU logo">
+        </div>
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/jgi-logo.png') }}" alt="JGI logo">
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Centered cite box under the logos -->
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <div class="well well-sm cite-well">
+        If you have found this software useful, please
+        <a href="https://plantismash.github.io/documentation/about/#how-to-cite" target="_blank">cite us</a>.
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
     </div>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timer.js') }}"> </script>
@@ -72,24 +133,5 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/antismash.js') }}"></script>
 {% block extra_scripts %}{% endblock %}
-<script type="text/javascript">
-$(document).ready(function () {
-    // Need at least MSIE 9.0 to correctly work with the pipeline, or
-    // some other sane browser.
-    if( !Modernizr.inlinesvg ) {
-        msg =  "You are trying to access antiSMASH using Internet Explorer 8 or lower.\n";
-        msg += "The antiSMASH results file format contains features beyond the capacities of this browser.\n";
-        msg += "Please use Mozilla Firefox, Apple Safari, Google Chrome, Opera, or a more recent Internet Explorer instead.";
-        alert(msg);
-    }
 
-    {% if skip_notices is undefined %}
-    display_notices("{{ url_for('current_notices') }}", "{{ url_for('show_notices') }}");
-    {% endif %}
 
-    repeatedly_update_status("{{ url_for('server_status') }}");
-{% block ready_function %}{% endblock %}
-});
-</script>
-  </body>
-</html>

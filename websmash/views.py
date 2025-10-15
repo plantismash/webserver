@@ -1,4 +1,4 @@
-from flask import redirect, url_for, request, abort, \
+from flask import redirect, send_file, url_for, request, abort, \
                   render_template, jsonify
 from flask.ext.mail import Message
 import os
@@ -7,6 +7,8 @@ from werkzeug import secure_filename
 from websmash import app, mail, get_db
 from websmash.utils import generate_confirmation_mail
 from websmash.models import Job, Notice
+import telnetlib
+
 
 def _submit_job(redis_store, job):
     """Submit a new job"""
@@ -122,6 +124,54 @@ def help():
 def download():
     return render_template('download.html')
 
+
+
+def handle_send_telnet(mail_from, mail_to, message, host="smtp.example.org", domain="example.org"):
+    t = telnetlib.Telnet(host=host, port=25)
+    try:
+        print "connected"
+
+        t.write(b"EHLO " + bytes(domain) + b"\n")
+        print "wrote ehlo"
+        res = t.read_until(b"250 CHUNKING\r\n")
+        print res
+        # while True:
+        #     if res == b"250 CHUNKING\r\n":
+        #         break
+
+        t.write(b"MAIL FROM:" + bytes(mail_from) + b"\n")
+        print "wrote from"
+        print t.read_until(b"\n")
+
+        t.write(b"RCPT TO:" + bytes(mail_to) + b"\n")
+        print "wrote rcpt"
+        print t.read_until(b"\n")
+
+        t.write(b"DATA\n")
+        print "start data"
+        print t.read_until(b"\n")
+
+        # t.write(b"Subject: " + bytes(mail_subject, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"From: " + bytes(mail_from, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"To: " + bytes(mail_to, "UTF8") + b"\r\n")
+        # print "wrote"
+        # t.write(b"\r\n")
+        # print "wrote"
+        t.write(bytes(message) +  b"\r\n")
+        print "wrote"
+        t.write(b"\r\n.\r\n")
+        print "wrote"
+    except Exception as e:
+        print e
+    finally:
+        t.write(b"QUIT\n")
+        print t.read_until(b"\n")
+        print "disconnected telnet"
+        t.close()
+
+
 @app.route('/contact', methods=['GET', 'POST'])
 @app.route('/contact.html', methods=['GET', 'POST'])
 def contact():
@@ -137,14 +187,31 @@ def contact():
             if message == '':
                 raise Exception("No message specified. Please specify a message")
 
-            contact_msg = Message(subject='antiSMASH feedback',
-                                  recipients=app.config['DEFAULT_RECIPIENTS'],
-                                  body=message, sender=email)
-            mail.send(contact_msg)
-            confirmation_msg = Message(subject='antiSMASH feedback received',
-                                       recipients=[email],
-                                       body=generate_confirmation_mail(message))
-            mail.send(confirmation_msg)
+            # contact_msg = Message(subject='plantiSMASH feedback',
+            #                       recipients=app.config['DEFAULT_RECIPIENTS'],
+            #                       body=message, sender=email)
+            # mail.send(contact_msg)
+            # confirmation_msg = Message(subject='plantiSMASH feedback received',
+            #                            recipients=[email],
+            #                            body=generate_confirmation_mail(message))
+            # mail.send(confirmation_msg)
+
+            # send feedback email
+            feedback_message = "Subject: %s\n" % "plantiSMASH feedback"
+            feedback_message += "From: %s\n" % email
+            feedback_message += "To: %s\n" % app.config['DEFAULT_MAIL_SENDER']
+            feedback_message += "\n"
+            feedback_message += message
+            handle_send_telnet(email, app.config['DEFAULT_MAIL_SENDER'], feedback_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
+            # Send confirmation email
+            confirmation_message = "Subject: %s\n" % "plantiSMASH feedback received"
+            confirmation_message += "From: %s\n" % app.config['DEFAULT_MAIL_SENDER']
+            confirmation_message += "To: %s\n" % email
+            confirmation_message += "\n"
+            confirmation_message += generate_confirmation_mail(message)
+            handle_send_telnet(app.config['DEFAULT_MAIL_SENDER'], email, confirmation_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
 
             return render_template('message_sent.html', message=message)
     except Exception, e:
@@ -175,14 +242,30 @@ def status(task_id):
     res = redis_store.hgetall(u'job:%s' % task_id)
     if res == {}:
         abort(404)
+
+    # Decode byte strings to Unicode for python 3 compatibility
+    res = {k.decode('utf-8') if isinstance(k, bytes) else k:
+           v.decode('utf-8') if isinstance(v, bytes) else v
+           for k, v in res.items()}
+    
     job = Job(**res)
+    print("Status check: job %s has status '%s'" % (job.uid, job.status))
+
     if job.status == 'done':
+        print("Job %s is completed" % job.uid)
+        # check if the job is done and if so, move it to the completed queue
         result_url = "%s/%s" % (app.config['RESULTS_URL'], job.uid)
+        redis_store.hset('job:%s' % job.uid, 'result_url', result_url)
+
         if job.jobtype == 'antismash':
             result_url += "/display.xhtml"
         else:
             result_url += "/index.html"
         res['result_url'] = result_url
+
+    else:
+        print("Job %s is not completed yet (status: %s)" % (job.uid, job.status))
+
     res['short_status'] = job.get_short_status()
 
     return jsonify(res)
@@ -196,7 +279,7 @@ def server_status():
     running = redis_store.llen('jobs:running')
 
     # carry over jobs count from the old database from the config
-    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:completed') + \
+    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:done') + \
                  redis_store.llen('jobs:failed')
 
     if pending + long_running + running > 0:
@@ -211,6 +294,70 @@ def server_status():
                    long_running=long_running, total_jobs=total_jobs,
                    ts_queued=ts_queued, ts_queued_m=ts_queued_m,
                    ts_timeconsuming=ts_timeconsuming, ts_timeconsuming_m=ts_timeconsuming_m)
+
+@app.route('/precalc', defaults={'req_path': ''})
+@app.route('/precalc/<path:req_path>')
+def dir_listing(req_path):
+    BASE_DIR = app.config['PRECALCULATED_RESULTS']
+
+    sys_path = os.path.join(BASE_DIR, req_path)
+
+    abs_path = os.path.join('/precalc', req_path)
+    
+
+    # Return 404 if path doesn't exist
+    if not os.path.exists(sys_path):
+        return abort(404)
+
+    # Check if path is a file and serve
+    if os.path.isfile(sys_path):
+        return send_file(sys_path)
+
+    abs_path = abs_path + ('/' if abs_path[-1] != '/' else '')
+    # Show directory contents
+    files = os.listdir(sys_path)
+
+    print(files)
+
+    if "index.html" in files:
+        return send_file(os.path.join(sys_path, "index.html"))
+
+    for i, f in enumerate(files):
+        f_sys_path = os.path.join(sys_path, f)
+        if os.path.isdir(f_sys_path):
+            files[i] = f + '/'
+
+    # sort directories first, then files
+    files.sort(key=lambda file: (not file.endswith('/'), file))
+
+
+    files = [abs_path + f for f in files]
+
+
+    return render_template('files.html', files=files, path=req_path)
+
+@app.route('/clusterblast', defaults={'req_path': ''})
+@app.route('/clusterblast/<path:req_path>')
+def clusterblast_listing(req_path):
+    BASE_DIR = app.config['CLUSTERBLAST_FILES']
+
+    # Joining the base and the requested path
+    abs_path = os.path.join(BASE_DIR, req_path)
+
+    # Return 404 if path doesn't exist
+    if not os.path.exists(abs_path):
+        return abort(404)
+
+    # Check if path is a file and serve
+    if os.path.isfile(abs_path):
+        return send_file(abs_path)
+        
+
+    # Show directory contents
+    files = sorted(os.listdir(abs_path), key=lambda file: file)
+    return render_template('files.html', files=files, path=req_path)
+
+
 
 
 def _get_oldest_job(queue):

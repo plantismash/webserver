@@ -16,6 +16,11 @@ app.wsgi_app = SharedDataMiddleware(app.wsgi_app,
                                      '/favicon.ico': path.join(app.root_path, 'static', 'images', 'favicon.ico')})
 mail = Mail(app)
 
+@app.context_processor
+def inject_version():
+    return dict(version=app.config.get('VERSION', 'dev'))
+
+print("Webserver specifies version:", app.config.get('VERSION'))
 
 def get_db():
     redis_store = getattr(g, '_database', None)

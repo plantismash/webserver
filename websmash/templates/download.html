@@ -7,7 +7,7 @@
 <div class="tabbable tabs-left">
   <div class="tab-content">
     <div class="tab-pane active">
-      <p>The current standalone release is plantiSMASH <strong>1.0</strong> (<em>December 12th, 2019</em>).</p>
+      <p>The current standalone release is <a href="https://github.com/plantismash/plantismash/tree/dev">plantiSMASH <strong>2.0-beta</strong></a>  (<em>December 16th, 2024</em>).</p>
     </div>
 
     <div>
@@ -31,14 +31,17 @@
             <li><a href="http://weizhongli-lab.org/cd-hit/download.php">CD-HIT</a> (version 4.6.6 tested)</li>
             <li><a href="http://tukaani.org/xz/">xz</a> development headers (version 5.1.1 tested)</li>
             <li><a href="http://xmlsoft.org">xml</a> development headers (version 2.9.1 tested)</li>
-            <li>python (version 2.7 tested, anything &gt;= python 2.6 should work)</li>
-            <li>python-virtualenv (not needed, but highly recommended)</li>
+            <li>python (version 2.7 tested)</li>
+            <li><a href="https://matsen.fhcrc.org/pplacer/">pplacer</a> (version 1.1 tested) </li>
+            <li><a href="https://huttenhower.sph.harvard.edu/graphlan/">GraPhlAn</a> (version 1.1.3.1 tested) </li>
         </ul>
-        <p>Then, create a python virtualenv for installing the plantiSMASH python dependencies. This is not required, but highly recommended.</p>
-        <pre><code class="bash hljs">virtualenv as3<span class="hljs-built_in">source</span> as3/bin/activate</code></pre>
-        <p>All the python dependencies are listed in <code>requirements.txt</code>, you can grab them all and install them with a simple command:</p>
-        <pre><code class="bash hljs">pip install -r requirements.txt</code></pre>
-        <p>Last but not least, run <code>download_databases.py</code> to grab and prepare the databases:</p>
+        <p>Create virtual conda enviroment.for installing the plantiSMASH python dependencies. </p>
+        <pre><code class="bash hljs">mamba create -n plantismash python=2.7.18</code></pre>
+        <p>Activate the conda environment.</p>
+        <pre><code class="bash hljs">conda activate plantismash</code></pre>
+        <p>Install dependencies by running<code>install_dependencies.py</code> : </p>
+        <pre><code class="bash hljs">python install_dependencies.py</code></pre>
+        <p>Last but not least, run <code>download_databases.py</code> to grab and prepare the databases needed for the analyses:</p>
         <pre><code class="bash hljs">python download_databases.py</code></pre>
       </p>
     </div>

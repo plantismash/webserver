@@ -32,15 +32,15 @@ Status: <span id="status">
 {% endif -%}
 </div>
 <p>
-PlantiSMASH jobs take a few minutes to multiple hours to complete, depending on the nature of the input data (total number of genes, additional analyses selected).
+plantiSMASH jobs take a few minutes to multiple hours to complete, depending on the nature of the input data (total number of genes, additional analyses selected).
 As an example, processing the <i><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/735/GCF_000001735.3_TAIR10/GCF_000001735.3_TAIR10_genomic.gbff.gz">Arabidopsis thaliana genome</a></i> (48,350 total ORFs) with all additional analyses selected (coexpression analysis using GEO <a href="https://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=GDS416">GDS416</a> dataset) took roughly 17 minutes of compute time on our server.
 </p>
 {% if job.get_short_status() == "removed" %}
 <p>Your job has exceeded the maximum storage time and was removed.</p>
 {% else %}
-<p><b>Important:</b> If you did not provide an email address, please bookmark this page so you can access your antiSMASH results later.
+<p><b>Important:</b> If you did not provide an email address, please bookmark this page so you can access your plantiSMASH results later.
 <p>If you specified an email address on the job submission page, you will be notified by email once the job is complete.</p>
-<p>Running antiSMASH on a complete genome will take a couple of hours, and depending on the server load it will
+<p>Running plantiSMASH on a complete genome will take a couple of hours, and depending on the server load it will
    take a while for your job to start.
 </p>
 {% endif -%}
