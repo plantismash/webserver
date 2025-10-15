@@ -10,6 +10,43 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/less.js') }}"> </script>
     {% block extra_headers %}{% endblock %}
 </head>
+<style>
+  /* Force a centered row with tight spacing */
+  .org-logos{
+    display:flex !important;
+    justify-content:center;
+    align-items:center;
+    gap:12px;                 /* reduce spacing */
+    flex-wrap:wrap;
+    margin:14px 0 6px;
+  }
+
+  /* Remove any extra margins from frames */
+  .org-logos .logo-frame{
+    padding:0;
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    /* width optional – let images size themselves by height */
+  }
+
+  /* Make the logos BIG by explicit height. Block removes inline-gap. */
+  .org-logos .logo-frame img{
+    display:block;
+    height:80px !important;  /* <- change 140→160 if you want larger */
+    width:auto !important;
+    max-height:none !important;
+    max-width:none !important;
+  }
+
+
+  /* Slightly larger on desktop */
+  @media (min-width:992px){
+    .org-logos .logo-frame img{ height:60px !important; }
+    .org-logos{ gap:16px; }
+  }
+</style>
 <body>
     <div class="row header">
       <div class="col-md-1 col-md-offset-2">
@@ -17,7 +54,7 @@
       </div>
       <div class="col-md-5 antismash-title">
         <a href="{{ url_for('new') }}">Plant Specialized Metabolite Analysis</a> 
-        <span class="version" style="color: white;">v{{ version }}</span>
+        <span class="version" style="color: white;">{{ version }}</span>
       </div>
       <div class="col-md-4 icons">
         <a href="{{ url_for('new') }}"><img src="{{ url_for('static', filename='images/home.png') }}" alt="home" title="Go to start page"></a>
@@ -55,27 +92,40 @@
         {% block extra_notices %}{% endblock %}
       </div>
     </div>
-    <div class="footer container">
-      <div class="org-logos row justify-content-center align-items-center text-center" style="gap: 1rem;">
-        <div class="col-1 col-md-3">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/wur-logo1.png') }}" style="padding-top: 1em; width: 100%;">
+<div class="footer container">
+
+  <!-- Logos row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="org-logos">
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/wur-logo1.png') }}" alt="WUR logo">
         </div>
-        <div class="col-1 col-md-2">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/jic_logo.png') }}" style="width: 100%;">
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/jic_logo.png') }}" alt="JIC logo">
         </div>
-        <div class="col-1 col-md-3">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/hu-logo.png') }}" style="width: 100%;">
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/hu-logo.png') }}" alt="HU logo">
         </div>
-        <div class="col-1 col-md-2">
-          <img class="img-fluid" src="{{ url_for('static', filename='images/jgi-logo.png') }}" style="width: 100%;">
-        </div>
-        <div class="col-1 col-md-2 d-flex justify-content-center">
-          <div class="copyright-box well well-small text-center">
-            If you have found plantiSMASH useful, please <a href=https://plantismash.github.io/documentation/about/#how-to-cite>cite us</a>.
-          </div>
+        <div class="logo-frame">
+          <img src="{{ url_for('static', filename='images/jgi-logo.png') }}" alt="JGI logo">
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Centered cite box under the logos -->
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <div class="well well-sm cite-well">
+        If you have found this software useful, please
+        <a href="https://plantismash.github.io/documentation/about/#how-to-cite" target="_blank">cite us</a>.
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
     </div>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timer.js') }}"> </script>
@@ -83,24 +133,5 @@
     <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/antismash.js') }}"></script>
 {% block extra_scripts %}{% endblock %}
-<script type="text/javascript">
-$(document).ready(function () {
-    // Need at least MSIE 9.0 to correctly work with the pipeline, or
-    // some other sane browser.
-    if( !Modernizr.inlinesvg ) {
-        msg =  "You are trying to access antiSMASH using Internet Explorer 8 or lower.\n";
-        msg += "The antiSMASH results file format contains features beyond the capacities of this browser.\n";
-        msg += "Please use Mozilla Firefox, Apple Safari, Google Chrome, Opera, or a more recent Internet Explorer instead.";
-        alert(msg);
-    }
 
-    {% if skip_notices is undefined %}
-    display_notices("{{ url_for('current_notices') }}", "{{ url_for('show_notices') }}");
-    {% endif %}
 
-    repeatedly_update_status("{{ url_for('server_status') }}");
-{% block ready_function %}{% endblock %}
-});
-</script>
-  </body>
-</html>

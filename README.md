@@ -5,6 +5,7 @@ This is the web interface powering https://plantismash.bioinformatics.nl
 
 Installation
 ------------
+Information on installing the plantiSMASH user interface locally. 
 
 1. Clone the repository and move in the directory of the repository
 
@@ -47,8 +48,8 @@ DEFAULT_RECIPIENTS = ["alice@example.com", "bob@example.com"]
 REDIS_URL = 'redis://your.redis.database:port/number'
 # defaults to redis://localhost:6379/0
 
-# Version of antiSMASH to use
-VERSION = '2.0-beta'
+# Version of plantiSMASH to use
+VERSION = '2.0.1'
 
 # Flask-Downloader settings
 # This should be the same as RESULTS_PATH
