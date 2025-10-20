@@ -94,6 +94,27 @@
     </div>
 <div class="footer container">
 
+
+
+<!-- plantiSMASH License + Cite Box -->
+<div class="alert alert-success text-center" style="margin-top: 2rem;">
+  If you have found this software useful, please
+  <a href="https://plantismash.github.io/documentation/about/#how-to-cite" target="_blank">cite us</a>.
+  <br><br>
+  <strong>plantiSMASH License:</strong>
+  plantiSMASH is licensed under the
+  <a href="https://www.gnu.org/licenses/agpl-3.0" target="_blank">
+    GNU Affero General Public License v3.0
+  </a>.
+  <br><br>
+  <a href="https://github.com/plantismash/plantismash" target="_blank" title="View on GitHub">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v5/icons/github.svg"
+         alt="GitHub"
+         style="height:1em;vertical-align:middle;margin-right:4px;">
+    Visit the <strong>plantiSMASH GitHub Repository</strong>
+  </a>
+</div>
+
   <!-- Logos row -->
   <div class="row">
     <div class="col-xs-12">
@@ -114,24 +135,31 @@
     </div>
   </div>
 
-  <!-- Centered cite box under the logos -->
-  <div class="row">
-    <div class="col-xs-12 text-center">
-      <div class="well well-sm cite-well">
-        If you have found this software useful, please
-        <a href="https://plantismash.github.io/documentation/about/#how-to-cite" target="_blank">cite us</a>.
-      </div>
-    </div>
-  </div>
-
-</div>
-</div>
-    </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timer.js') }}"> </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timeago.js') }}"> </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/antismash.js') }}"></script>
-{% block extra_scripts %}{% endblock %}
 
 
+
+
+
+
+  <!-- The part for the job processing boxes -->
+<script type="text/javascript">
+$(document).ready(function () {
+    // Need at least MSIE 9.0 to correctly work with the pipeline, or
+    // some other sane browser.
+    if( !Modernizr.inlinesvg ) {
+        msg =  "You are trying to access antiSMASH using Internet Explorer 8 or lower.\n";
+        msg += "The antiSMASH results file format contains features beyond the capacities of this browser.\n";
+        msg += "Please use Mozilla Firefox, Apple Safari, Google Chrome, Opera, or a more recent Internet Explorer instead.";
+        alert(msg);
+    }
+
+    {% if skip_notices is undefined %}
+    display_notices("{{ url_for('current_notices') }}", "{{ url_for('show_notices') }}");
+    {% endif %}
+
+    repeatedly_update_status("{{ url_for('server_status') }}");
+{% block ready_function %}{% endblock %}
+});
+</script>
+  </body>
+</html>
