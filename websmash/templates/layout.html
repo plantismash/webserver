@@ -136,29 +136,17 @@
   </div>
 
 
-
-
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timer.js') }}"> </script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timeago.js') }}"> </script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/antismash.js') }}"></script>
 
 
 
   <!-- The part for the job processing boxes -->
 <script type="text/javascript">
-$(document).ready(function () {
-    // Need at least MSIE 9.0 to correctly work with the pipeline, or
-    // some other sane browser.
-    if( !Modernizr.inlinesvg ) {
-        msg =  "You are trying to access antiSMASH using Internet Explorer 8 or lower.\n";
-        msg += "The antiSMASH results file format contains features beyond the capacities of this browser.\n";
-        msg += "Please use Mozilla Firefox, Apple Safari, Google Chrome, Opera, or a more recent Internet Explorer instead.";
-        alert(msg);
-    }
-
-    {% if skip_notices is undefined %}
-    display_notices("{{ url_for('current_notices') }}", "{{ url_for('show_notices') }}");
-    {% endif %}
-
+document.addEventListener("DOMContentLoaded", () => {
     repeatedly_update_status("{{ url_for('server_status') }}");
-{% block ready_function %}{% endblock %}
 });
 </script>
   </body>
