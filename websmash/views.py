@@ -251,7 +251,7 @@ def status(task_id):
     job = Job(**res)
     print("Status check: job %s has status '%s'" % (job.uid, job.status))
 
-    if job.status == 'done':
+    if job.status == 'completed':
         print("Job %s is completed" % job.uid)
         # check if the job is done and if so, move it to the completed queue
         result_url = "%s/%s" % (app.config['RESULTS_URL'], job.uid)
