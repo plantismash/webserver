@@ -148,6 +148,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     repeatedly_update_status("{{ url_for('server_status') }}");
 });
+{% block ready_function %}{% endblock %}
 </script>
   </body>
 </html>
