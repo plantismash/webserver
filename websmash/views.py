@@ -163,6 +163,12 @@ def contact():
             feedback_message += "To: %s\n" % app.config['DEFAULT_MAIL_SENDER']
             feedback_message += "\n"
             feedback_message += message
+
+            print("sending feedback message")
+            print("from: " + email)
+            print("to: " + app.config['DEFAULT_MAIL_SENDER'])
+            print(feedback_message)
+
             handle_send_smtp(email, app.config['DEFAULT_MAIL_SENDER'], feedback_message, host=app.config["MAIL_SERVER"])
 
             # Send confirmation email
@@ -171,6 +177,12 @@ def contact():
             confirmation_message += "To: %s\n" % email
             confirmation_message += "\n"
             confirmation_message += generate_confirmation_mail(message)
+
+            print("sending confirmation message")
+            print("from: " + app.config['DEFAULT_MAIL_SENDER'])
+            print("to: " + email)
+            print(confirmation_message)
+
             handle_send_smtp(app.config['DEFAULT_MAIL_SENDER'], email, confirmation_message, host=app.config["MAIL_SERVER"])
 
 
