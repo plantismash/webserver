@@ -126,50 +126,11 @@ def download():
 
 
 
-def handle_send_telnet(mail_from, mail_to, message, host="smtp.example.org", domain="example.org"):
-    t = telnetlib.Telnet(host=host, port=25)
-    try:
-        print "connected"
-
-        t.write(b"EHLO " + bytes(domain) + b"\n")
-        print "wrote ehlo"
-        res = t.read_until(b"250 CHUNKING\r\n")
-        print res
-        # while True:
-        #     if res == b"250 CHUNKING\r\n":
-        #         break
-
-        t.write(b"MAIL FROM:" + bytes(mail_from) + b"\n")
-        print "wrote from"
-        print t.read_until(b"\n")
-
-        t.write(b"RCPT TO:" + bytes(mail_to) + b"\n")
-        print "wrote rcpt"
-        print t.read_until(b"\n")
-
-        t.write(b"DATA\n")
-        print "start data"
-        print t.read_until(b"\n")
-
-        # t.write(b"Subject: " + bytes(mail_subject, "UTF8") + b"\r\n")
-        # print "wrote"
-        # t.write(b"From: " + bytes(mail_from, "UTF8") + b"\r\n")
-        # print "wrote"
-        # t.write(b"To: " + bytes(mail_to, "UTF8") + b"\r\n")
-        # print "wrote"
-        # t.write(b"\r\n")
-        # print "wrote"
-        t.write(bytes(message) +  b"\r\n")
-        print "wrote"
-        t.write(b"\r\n.\r\n")
-        print "wrote"
-    except Exception as e:
-        print e
-    finally:
-        t.write(b"QUIT\n")
-        print t.read_until(b"\n")
-        print "disconnected telnet"
-        t.close()
+def handle_send_smtp(mail_from, mail_to, message, host="smtp.example.org", port=25):
+    import smtplib
+    s = smtplib.SMTP(host, port)
+    s.ehlo_or_helo_if_needed()
+    s.sendmail(mail_from, mail_to, message)
 
 
 @app.route('/contact', methods=['GET', 'POST'])
@@ -202,7 +163,13 @@ def contact():
             feedback_message += "To: %s\n" % app.config['DEFAULT_MAIL_SENDER']
             feedback_message += "\n"
             feedback_message += message
-            handle_send_telnet(email, app.config['DEFAULT_MAIL_SENDER'], feedback_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
+            print("sending feedback message")
+            print("from: " + email)
+            print("to: " + app.config['DEFAULT_MAIL_SENDER'])
+            print(feedback_message)
+
+            handle_send_smtp(email, app.config['DEFAULT_MAIL_SENDER'], feedback_message, host=app.config["MAIL_SERVER"])
 
             # Send confirmation email
             confirmation_message = "Subject: %s\n" % "plantiSMASH feedback received"
@@ -210,7 +177,13 @@ def contact():
             confirmation_message += "To: %s\n" % email
             confirmation_message += "\n"
             confirmation_message += generate_confirmation_mail(message)
-            handle_send_telnet(app.config['DEFAULT_MAIL_SENDER'], email, confirmation_message, host=app.config["MAIL_SERVER"], domain=app.config['MAIL_DOMAIN'])
+
+            print("sending confirmation message")
+            print("from: " + app.config['DEFAULT_MAIL_SENDER'])
+            print("to: " + email)
+            print(confirmation_message)
+
+            handle_send_smtp(app.config['DEFAULT_MAIL_SENDER'], email, confirmation_message, host=app.config["MAIL_SERVER"])
 
 
             return render_template('message_sent.html', message=message)
