@@ -279,7 +279,7 @@ def server_status():
     running = redis_store.llen('jobs:running')
 
     # carry over jobs count from the old database from the config
-    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:done') + \
+    total_jobs = app.config['OLD_JOB_COUNT'] + redis_store.llen('jobs:completed') + \
                  redis_store.llen('jobs:failed')
 
     if pending + long_running + running > 0:
