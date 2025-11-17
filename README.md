@@ -15,13 +15,22 @@ cd webserver
 
 2. Create a virtual environment and install requirements
 
+Note: for setting python 2 working environment we recommend the use of pyenv 
+
 ```
-conda create -n plantiserver 
+pyenv global 2.7.18
+pyenv versions
+```
+
+Then create the virtual environment using python 2 
+
+```
+conda create -n plantiserver python=2.7
 conda activate plantiserver 
 pip install -r requirements.txt
 ```
 
-3. Run the webserver
+1. Run the webserver
 
 ```
 python run_development_server.py
