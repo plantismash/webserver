@@ -134,12 +134,12 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}"> </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timer.js') }}"> </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.timeago.js') }}"> </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/antismash.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
 
   <!-- The part for the job processing boxes -->
 <script type="text/javascript">
