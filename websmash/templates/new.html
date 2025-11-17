@@ -9,7 +9,7 @@
 {% endif %}
 {% endblock %}
 {% block body %}
-<div class="well alert-danger" style="display: block;"> 
+<div class="alert alert-warning" style="display: block;"> 
     <!-- 
     This alert is hidden by default using 'display: none'.
     Set to 'display: block' (or remove the inline style) to show it.
@@ -35,11 +35,25 @@
 </ul>
 <div class="tab-content">
   <div role="tabpanel" class="tab-pane active" id="nucl">
-    <div>Search plant genome sequence for secondary metabolite biosynthesis gene clusters:</div>
+    <div>Search plant genome sequence for specialized metabolite biosynthesis gene clusters:</div>
+
+<div class="alert alert-warning" style="margin-top: 1em;">
+  ‼️ Before submitting a job, please check the 
+  <a href="./precalc/v2">plantiSMASH database of precalculated results</a>
+  to see if your genome of interest is already available.
+  <br><br>
+  For heavy jobs or to use some of the latest features (e.g., the TFBS Finder module),  
+  please consider running plantiSMASH locally via the command line.  
+  See the <a href="https://plantismash.github.io/documentation/command_line/">CLI documentation</a> for details.
+</div>
+
     <div>
       <button class="btn btn-inverse" id="btn-sample-input">Load sample input</button>
       <button class="btn btn-inverse" id="btn-sample-output">Open example output</button>
+
     </div>
+
+
     <div class="spacer"></div>
     <div>
       <form class="form" method="POST" id="nucl-form" enctype="multipart/form-data">
@@ -89,7 +103,7 @@
             <div class="col-md-6">
               <label for="knownclusterblast">
                 <input type="checkbox" name="knownclusterblast" id="knownclusterblast">
-                Compare to registered known clusters from MIBiG Database</label>
+                Compare to registered known clusters from <a href="https://mibig.secondarymetabolites.org/">MIBiG Database</a></label>
             </div>
           </div>
           <div id="coexpress-control" data-toggle="collapse" data-target=".coexpress" style="margin-top: 0.5em;">
@@ -100,12 +114,19 @@
             <div class="col-md-5">
               <input class="form-control" type="file" name="coexpress_file" id="coexpress_file">
             </div>
-            <label class="col-md-6">Load a <a href="https://www.ncbi.nlm.nih.gov/geo/">Gene Expression Omnibus (GEO)</a> SOFT file or a <a href="./help.html#coexpress">properly formatted</a> CSV file</label>
+            <label class="col-md-6">Load a <a href="https://www.ncbi.nlm.nih.gov/geo/">Gene Expression Omnibus (GEO)</a> SOFT file or a <a href="https://plantismash.github.io/documentation/modules/coexpress/">properly formatted</a> CSV file</label>
           </div>
         </fieldset>
         <fieldset class="as-form">
           <div style="margin-top: 0.5em;">
             <strong>Advanced options:</strong>
+
+            <div class="text-muted" style="font-size: 0.9em; margin-top: 0.3em;">
+            To further customize your analysis, consider running plantiSMASH locally 
+            <a href="https://plantismash.github.io/documentation/install/" target="_blank">
+            via the command line</a>.
+          </div>
+            
           </div>
           <div id="advanced-control" data-toggle="collapse" data-target=".advanced" style="margin-top: 0.5em;">
             <span class="glyphicon glyphicon-plus" id="advanced-button"></span>
@@ -130,7 +151,10 @@
 
         <div class="spacer"></div>
         <div class="well">
+
+                         
           <button type="submit" class="btn btn-primary">Submit</button>
+
         </div>
       </form>
     </div>
