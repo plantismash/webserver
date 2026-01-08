@@ -222,7 +222,7 @@ function verify_nucl_form() {
     } else if ( is_fasta(file) && !is_gff3(gff) ) {
         alert('Please provide annotation file (GFF3 format)');
         return false;
-    } else if ( !is_valid_coexpress(coexpress) ) {
+    } else if (coexpress !== '' && !is_valid_coexpress(coexpress) ) {
         alert('Please provide coexpress file (SOFT or csv format)');
         return false;
     }
