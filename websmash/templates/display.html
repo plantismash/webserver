@@ -12,38 +12,55 @@
 
 {% block body %}
 <div id="display">
-<h2>Status of job {{ job.filename }} analysis</h2>
-<p>Submitted: <span id="submitted">{{ job.added.strftime('%Y-%m-%d %H:%M:%S') }}</span><br />
-Status: <span id="status">
-  {% autoescape false %}
-    {{ job.get_status()|e|replace('\n', '<br>') }}
-  {% endautoescape %}
-  </span>
-   <img id="status-img" src="{{ url_for('static', filename='images/' + job.get_short_status()+'.gif')}}"><br />
-   Last status change at: <span id="last-changed">{{ job.last_changed.strftime('%Y-%m-%d %H:%M:%S') }}</span><br />
-</p>
-<div id="result-link">
-{% if job.get_short_status() == "done" %}
-  {% if job.jobtype == "antismash" %}
-    <p>See the <a href="{{ results_path }}/{{ job.uid }}/display.xhtml">results</a>
+  <h2>Status of job {{ job.filename }} analysis</h2>
+  <p>
+    Submitted: <span id="submitted">{{ job.added.strftime('%Y-%m-%d %H:%M:%S') }}</span><br>
+    Status: <span id="status">
+      {% autoescape false %}
+        {{ job.get_status()|e|replace('\n', '<br>') }}
+      {% endautoescape %}
+    </span>
+    <img id="status-img" src="{{ url_for('static', filename='images/' + job.get_short_status()+'.gif') }}"><br>
+    Last status change at: <span id="last-changed">{{ job.last_changed.strftime('%Y-%m-%d %H:%M:%S') }}</span><br>
+  </p>
+  <div id="result-link">
+    {% if job.get_short_status() == "done" %}
+      {% if job.jobtype == "antismash" %}
+        <p>See the <a href="{{ results_path }}/{{ job.uid }}/display.xhtml">results</a></p>
+      {% else %}
+        <p>See the <a href="{{ results_path }}/{{ job.uid }}/index.html">results</a></p>
+      {% endif -%}
+    {% endif -%}
+  </div>
+  <p>
+    plantiSMASH jobs take a few minutes to multiple hours to complete, depending on the nature of the input data
+    (total number of genes, additional analyses selected). As an example, processing the
+    <i><a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001735.3">Arabidopsis thaliana genome</a></i>
+    (48,350 total ORFs) with all additional analyses selected (coexpression analysis using GEO
+    <a href="https://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=GDS416">GDS416</a> dataset)
+    took roughly 17 minutes of compute time on our server.
+  </p>
+  {% if job.get_short_status() == "removed" %}
+  <p>Your job has exceeded the maximum storage time and was removed.</p>
   {% else %}
-    <p>See the <a href="{{ results_path }}/{{ job.uid }}/index.html">results</a>
+  <p><b>Important:</b> If you did not provide an email address, please bookmark this page so you can access your plantiSMASH results later.</p>
+  <p>If you specified an email address on the job submission page, you will be notified by email once the job is complete.</p>
+  <p>Running plantiSMASH on a complete genome will take a couple of hours, and depending on the server load it will
+    take a while for your job to start.
+  </p>
+  {% if job.get_short_status() == "failed" %}
+  <p>Your job has failed.</p>
+  {% else %}
+  <p><b>Important:</b> If your error persists, consider running plantiSMASH locally using the
+    <a href="https://plantismash.github.io/documentation/install/">Installation Instructions</a>
+    available on the documentation page.
+  </p>
+  <p>You can contact us at <a href="mailto:plantismash@bioinformatics.nl">plantismash@bioinformatics.nl</a>.</p>
+  <p>If you used an input NCBI accession number, please try to download the corresponding GenBank file from NCBI
+    and submit that file instead, as this might resolve the issue.
+  </p>
   {% endif -%}
-{% endif -%}
-</div>
-<p>
-plantiSMASH jobs take a few minutes to multiple hours to complete, depending on the nature of the input data (total number of genes, additional analyses selected).
-As an example, processing the <i><a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/735/GCF_000001735.3_TAIR10/GCF_000001735.3_TAIR10_genomic.gbff.gz">Arabidopsis thaliana genome</a></i> (48,350 total ORFs) with all additional analyses selected (coexpression analysis using GEO <a href="https://www.ncbi.nlm.nih.gov/sites/GDSbrowser?acc=GDS416">GDS416</a> dataset) took roughly 17 minutes of compute time on our server.
-</p>
-{% if job.get_short_status() == "removed" %}
-<p>Your job has exceeded the maximum storage time and was removed.</p>
-{% else %}
-<p><b>Important:</b> If you did not provide an email address, please bookmark this page so you can access your plantiSMASH results later.
-<p>If you specified an email address on the job submission page, you will be notified by email once the job is complete.</p>
-<p>Running plantiSMASH on a complete genome will take a couple of hours, and depending on the server load it will
-   take a while for your job to start.
-</p>
-{% endif -%}
+  {% endif -%}
 </div>
 {% endblock %}
 {% block ready_function %}
